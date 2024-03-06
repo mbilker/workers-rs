@@ -154,6 +154,22 @@ impl Request {
         Err(Error::BodyUsed)
     }
 
+    /// Access this request's body as a [`ReadableStream`](web_sys::ReadableStream) of bytes.
+    pub fn body(&mut self) -> Result<web_sys::ReadableStream> {
+        if self.body_used {
+            return Err(Error::BodyUsed);
+        }
+
+        self.body_used = true;
+
+        let stream = self
+            .edge_request
+            .body()
+            .ok_or_else(|| Error::RustError("no body for request".into()))?;
+
+        Ok(stream)
+    }
+
     /// Access this request's body as raw bytes.
     pub async fn bytes(&mut self) -> Result<Vec<u8>> {
         if !self.body_used {

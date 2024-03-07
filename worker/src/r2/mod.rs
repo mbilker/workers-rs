@@ -319,6 +319,17 @@ pub struct UploadedPart {
 }
 
 impl UploadedPart {
+    pub fn new(part_number: u16, etag: impl Into<String>) -> Result<Self> {
+        let obj = js_sys::Object::new();
+
+        Reflect::set(&obj, &"partNumber".into(), &part_number.into())?;
+        Reflect::set(&obj, &"etag".into(), &etag.into().into())?;
+
+        Ok(Self {
+            inner: EdgeR2UploadedPart::from(JsValue::from(obj)),
+        })
+    }
+
     pub fn part_number(&self) -> u16 {
         self.inner.part_number()
     }

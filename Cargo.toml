@@ -8,7 +8,7 @@ members = [
     "worker-kv",
     "examples/*",
 ]
-exclude = ["examples/coredump", "examples/axum", "templates/*"]
+exclude = ["examples/coredump", "examples/axum"]
 resolver = "2"
 
 [workspace.dependencies]
